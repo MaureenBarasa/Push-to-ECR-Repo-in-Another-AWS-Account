@@ -1,0 +1,25 @@
+  version: 0.2
+  phases:
+    install:
+      runtime-versions:
+         docker: 19
+      commands:
+        - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        - unzip awscliv2.zip
+        - ./aws/install
+    pre_build:
+      commands:
+        - echo logging to ecr
+        - $(aws ecr get-login --no-include-email --region eu-west-1 --registry-ids OTHER-AWS-ACCOUNT-ID)
+    build:
+      commands:
+        - docker build -t hello-world-3 .
+        - docker tag hello-world-3:latest OTHER-AWS-ACCOUNT-ID.dkr.ecr.eu-west-1.amazonaws.com/hello-world-3:latest
+        
+    post_build:
+      commands:
+        - echo build completed on 'date'
+        - echo pushing to repo
+        - docker push OTHER-AWS-ACCOUNT-ID.dkr.ecr.eu-west-1.amazonaws.com/hello-world-3:latest
+  artifacts:
+    files: "**/*"
