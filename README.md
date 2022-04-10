@@ -1,3 +1,4 @@
+```yaml
 # Push-to-ECR-Repo-in-Another-AWS-Account
 
 This repository creates a simple build project to build and push docker images to an ECR private repository in another AWS account. 
